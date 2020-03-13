@@ -1,0 +1,157 @@
+<html>
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>High-Low</title>
+    <link rel="stylesheet" href="stylesheets/highlow.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script>
+        function newGame() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Got it?");
+                    var card = this.response;
+                    //card = card.replace(".png", ".svg");
+                    document.getElementById("drawnCard").src = card;
+                }
+            };
+            xhttp.open("GET", "/newGame", true);
+            xhttp.send();
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h1>
+                        High-Low
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <h2>
+                    How to play
+                </h2>
+                <p>
+                    The rules of High-Low are simple. A card is drawn from the deck, then you guess whether the next card will be higher or lower than the card being shown. If you are correct you gain a point and continue guessing. If you are wrong it's game over.
+                </p>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6 center">
+                        <img class="image" alt="Draw Card" src="images/BlueBack.png" />
+                    </div>
+                    <div class="col-md-6 center">
+                        <img class="image" id="drawnCard" alt="Draw Card" src="images/BlueBack.png" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-2">
+                <table class="table-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Score
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                ABC
+                            </td>
+                            <td>
+                                26
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2
+                            </td>
+                            <td>
+                                XYZ
+                            </td>
+                            <td>
+                                22
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3
+                            </td>
+                            <td>
+                                MDL
+                            </td>
+                            <td>
+                                16
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                4
+                            </td>
+                            <td>
+                                AML
+                            </td>
+                            <td>
+                                12
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                5
+                            </td>
+                            <td>
+                                ZZZ
+                            </td>
+                            <td>
+                                10
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="col center">
+                <button class="button btn-success" id="newGameButton" type="button" onclick="newGame()">New Game</button>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="col-md-6">
+                <button class="button btn-success" id="newGameButton" type="button" onclick="">Lower</button>
+            </div>
+            <div class="col-md-6">
+                <button class="button btn-success" id="newGameButton" type="button" onclick="">Higher</button>
+            </div>
+        </div>
+        <br><br><br>
+        <div class="row">
+            <div class="col-md-12 center">
+                <span class="badge badge-default">Result</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

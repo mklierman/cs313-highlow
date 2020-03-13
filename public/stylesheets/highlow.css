@@ -1,0 +1,20 @@
+body {
+    background-image: radial-gradient(circle, #308834, #1A4A1C);
+}
+
+.page-header {
+    text-align: center;
+}
+
+.card-image {
+    text-align: center;
+}
+
+.image {
+    width: 226;
+    height: 314;
+}
+
+.center {
+    text-align: center;
+}
