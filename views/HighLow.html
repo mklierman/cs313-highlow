@@ -55,7 +55,7 @@
                         $("#newGameButton").show();
                         $("#lowerButton").hide();
                         $("#higherButton").hide();
-                        document.getElementById("gameMessage").textContent = "Game Over!";
+                        document.getElementById("gameMessage").textContent = "Game Over! You guessed " + guess.charAt(0).toUpperCase() + guess.slice(1);
                     } else {
                         score++;
 
