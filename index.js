@@ -73,8 +73,8 @@ function compareCards(callback) {
     } else {
         result = "Even";
     }
-    drawCard(function() {});
     callback(result);
+    drawCard(function() {});
 }
 
 function setCardValues() {
