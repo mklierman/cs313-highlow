@@ -1,5 +1,6 @@
 body {
     background-image: radial-gradient(circle, #308834, #1A4A1C);
+    min-width: 600px;
 }
 
 h1 {
@@ -25,8 +26,9 @@ h1 {
 }
 
 .image {
-    width: 226;
-    height: 314;
+    max-width: 226;
+    max-height: 314;
+    height: auto;
     margin-bottom: 10px;
 }
 
