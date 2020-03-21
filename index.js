@@ -38,7 +38,6 @@ app.get('/drawCard', function(req, res) {
         res.send(JSON.parse(resultObject));
     })
 
-    drawCard(function() {});
 });
 
 function getNewDeck(callback) {
@@ -55,8 +54,9 @@ function getNewDeck(callback) {
     }
 }
 
-function drawCard() {
+function drawCard(callback) {
     drawnCard++;
+    callback(true);
 }
 
 function compareCards(callback) {
@@ -69,13 +69,17 @@ function compareCards(callback) {
     if (newValue > oldValue) {
         result = "Higher";
         console.log("Higher: " + newValue + " > " + oldValue);
+        drawnCard++;
     } else if (newValue < oldValue) {
         console.log("Lower: " + newValue + " < " + oldValue);
+        drawnCard++;
         result = "Lower";
     } else {
         result = "Even";
+        drawnCard++;
     }
     callback(result);
+    //drawCard(function(result) {});
 }
 
 function setCardValues() {
