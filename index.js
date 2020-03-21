@@ -37,6 +37,8 @@ app.get('/drawCard', function(req, res) {
         var resultObject = '{"resultText": "' + result + '", "imageURL": "' + deck.cards[drawnCard].image + '"}';
         res.send(JSON.parse(resultObject));
     })
+
+    drawCard(function() {});
 });
 
 function getNewDeck(callback) {
@@ -74,7 +76,6 @@ function compareCards(callback) {
         result = "Even";
     }
     callback(result);
-    drawCard(function() {});
 }
 
 function setCardValues() {
