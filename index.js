@@ -33,6 +33,7 @@ app.get('/newGame', function(req, res) {
 });
 
 app.get('/drawCard', function(req, res) {
+    drawCard(function(result) {});
     compareCards(function(result) {
         var resultObject = '{"resultText": "' + result + '", "imageURL": "' + deck.cards[drawnCard].image + '"}';
         res.send(JSON.parse(resultObject));
@@ -61,25 +62,20 @@ function drawCard(callback) {
 
 function compareCards(callback) {
     var result = "";
-    var newCard = drawnCard + 1;
-    var oldValue = parseInt(deck.cards[drawnCard].value);
-    var newValue = parseInt(deck.cards[newCard].value);
+    var oldValue = parseInt(deck.cards[drawnCard - 1].value);
+    var newValue = parseInt(deck.cards[drawnCard].value);
     console.log(oldValue);
     console.log(newValue);
     if (newValue > oldValue) {
         result = "Higher";
         console.log("Higher: " + newValue + " > " + oldValue);
-        drawnCard++;
     } else if (newValue < oldValue) {
         console.log("Lower: " + newValue + " < " + oldValue);
-        drawnCard++;
         result = "Lower";
     } else {
         result = "Even";
-        drawnCard++;
     }
     callback(result);
-    //drawCard(function(result) {});
 }
 
 function setCardValues() {
