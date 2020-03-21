@@ -82,7 +82,7 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-2 center">
                 <h2>
                     How to play
                 </h2>
@@ -105,10 +105,38 @@
                     </div>
                 </div>
 
+                <div class="row center">
+                    <div class="col center">
+                        <button class="button btn-success newGameButton" id="newGameButton" type="button" onclick="newGame()">New Game</button>
+                    </div>
+                </div>
+                <div class="row center">
+                    <div class="col-md-12">
+                        <button class="button btn-success lowerButton" id="lowerButton" type="button" onclick="drawCard('lower')">Lower</button>
+                        <button class="button btn-success higherButton" id="higherButton" type="button" onclick="drawCard('higher')">Higher</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12 center">
+                        <span id="compareResult" class="badge badge-default" style="font-size: 40px;"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 center">
+                        <span id="gameMessage" class="badge badge-default" style="font-size: 40px;"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 center">
+                        <span id="playerScore" class="badge badge-default" style="font-size: 40px;"></span>
+                    </div>
+                </div>
+                <br>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 center">
                 <h3>High Scores</h3>
-                <table class="table-sm">
+                <table class="table-sm highScores">
                     <thead>
                         <tr>
                             <th>
@@ -180,33 +208,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="row center">
-            <div class="col center">
-                <button class="button btn-success newGameButton" id="newGameButton" type="button" onclick="newGame()">New Game</button>
-            </div>
-        </div>
-        <div class="row center">
-            <div class="col-md-12">
-                <button class="button btn-success lowerButton" id="lowerButton" type="button" onclick="drawCard('lower')">Lower</button>
-                <button class="button btn-success higherButton" id="higherButton" type="button" onclick="drawCard('higher')">Higher</button>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12 center">
-                <span id="compareResult" class="badge badge-default" style="font-size: 40px;"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 center">
-                <span id="gameMessage" class="badge badge-default" style="font-size: 40px;"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 center">
-                <span id="playerScore" class="badge badge-default" style="font-size: 40px;"></span>
             </div>
         </div>
     </div>

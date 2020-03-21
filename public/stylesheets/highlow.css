@@ -2,6 +2,10 @@ body {
     background-image: radial-gradient(circle, #308834, #1A4A1C);
 }
 
+h1 {
+    font-size: 80px !important;
+}
+
 .vertical-center {
     min-height: 100%;
     /* Fallback for browsers do NOT support vh unit */
@@ -62,4 +66,8 @@ body {
     width: 80px;
     height: 40px;
     display: none;
+}
+
+.highScores {
+    margin: 0 auto;
 }
