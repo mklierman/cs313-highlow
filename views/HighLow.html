@@ -5,22 +5,64 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>High-Low</title>
     <link rel="stylesheet" href="stylesheets/highlow.css" type="text/css" media="screen">
+    <link href="https://fonts.googleapis.com/css?family=Vast+Shadow&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script>
+        var score = 0;
+
         function newGame() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log("Got it?");
                     var card = this.response;
-                    //card = card.replace(".png", ".svg");
                     document.getElementById("drawnCard").src = card;
+                    document.getElementById("oldCard").src = "images/BlueBack.png";
+                    var b = document.getElementById("newGameButton");
+                    b.setAttribute("visibility", "hidden");
+                    $("#newGameButton").hide();
+                    $("#lowerButton").show();
+                    $("#higherButton").show();
+
+                    document.getElementById("gameMessage").textContent = "";
+                    document.getElementById("compareResult").textContent = "";
                 }
             };
             xhttp.open("GET", "/newGame", true);
             xhttp.send();
 
+
+        }
+
+        function drawCard(guess) {
+            var xhttp2 = new XMLHttpRequest();
+            xhttp2.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(this.response);
+                    console.log(result);
+                    var resultText = result.resultText;
+                    var imageURL = result.imageURL;
+                    console.log(resultText);
+                    console.log(imageURL);
+                    document.getElementById("compareResult").textContent = resultText;
+                    var oldImage = document.getElementById("drawnCard").src;
+                    document.getElementById("oldCard").src = oldImage;
+                    document.getElementById("drawnCard").src = imageURL;
+
+                    if (resultText.toLowerCase() != guess && resultText.toLowerCase() != "even") {
+                        $("#newGameButton").show();
+                        $("#lowerButton").hide();
+                        $("#higherButton").hide();
+                        document.getElementById("gameMessage").textContent = "Game Over!";
+                    } else {
+                        score++;
+
+                        document.getElementById("playerScore").textContent = "Score: " + score;
+                    }
+                }
+            };
+            xhttp2.open("GET", "/drawCard", true);
+            xhttp2.send();
         }
     </script>
 </head>
@@ -43,21 +85,27 @@
                     How to play
                 </h2>
                 <p>
-                    The rules of High-Low are simple. A card is drawn from the deck, then you guess whether the next card will be higher or lower than the card being shown. If you are correct you gain a point and continue guessing. If you are wrong it's game over.
+                    The rules of High-Low are simple. A card is drawn from the deck, then you guess whether the next card will be higher or lower than the card being shown. If you are correct you gain a point and continue guessing. If you are wrong it's game over. Aces are
+                    low, Kings are high, and you can't lose when an even numbered card is drawn.
                 </p>
             </div>
             <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-6 center">
-                        <img class="image" alt="Draw Card" src="images/BlueBack.png" />
+                <div class="row ">
+                    <div class="col-md-12 center">
+                        <label class="oldCardLabel">Old Card</label>
+                        <label class="newCardLabel">New Card</label>
                     </div>
-                    <div class="col-md-6 center">
-                        <img class="image" id="drawnCard" alt="Draw Card" src="images/BlueBack.png" />
+                </div>
+                <div class="row">
+                    <div class="col-md-12 center">
+                        <img class="image oldCardImage" id="oldCard" alt="Draw Card" src="images/BlueBack.png" />
+                        <img class="image newCardImage" id="drawnCard" alt="Draw Card" src="images/BlueBack.png" />
                     </div>
                 </div>
 
             </div>
             <div class="col-md-2">
+                <h3>High Scores</h3>
                 <table class="table-sm">
                     <thead>
                         <tr>
@@ -134,21 +182,29 @@
         </div>
         <div class="row center">
             <div class="col center">
-                <button class="button btn-success" id="newGameButton" type="button" onclick="newGame()">New Game</button>
+                <button class="button btn-success newGameButton" id="newGameButton" type="button" onclick="newGame()">New Game</button>
             </div>
         </div>
         <div class="row center">
-            <div class="col-md-6">
-                <button class="button btn-success" id="newGameButton" type="button" onclick="">Lower</button>
-            </div>
-            <div class="col-md-6">
-                <button class="button btn-success" id="newGameButton" type="button" onclick="">Higher</button>
+            <div class="col-md-12">
+                <button class="button btn-success lowerButton" id="lowerButton" type="button" onclick="drawCard('lower')">Lower</button>
+                <button class="button btn-success higherButton" id="higherButton" type="button" onclick="drawCard('higher')">Higher</button>
             </div>
         </div>
-        <br><br><br>
+        <br>
         <div class="row">
             <div class="col-md-12 center">
-                <span class="badge badge-default">Result</span>
+                <span id="compareResult" class="badge badge-default" style="font-size: 40px;"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 center">
+                <span id="gameMessage" class="badge badge-default" style="font-size: 40px;"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 center">
+                <span id="playerScore" class="badge badge-default" style="font-size: 40px;"></span>
             </div>
         </div>
     </div>

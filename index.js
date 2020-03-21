@@ -13,6 +13,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
 /* GET home page. */
 app.get('/', function(req, res, next) {
     res.render('HighLow', { title: 'High-Low' });
@@ -29,27 +32,49 @@ app.get('/newGame', function(req, res) {
     });
 });
 
+app.get('/drawCard', function(req, res) {
+    compareCards(function(result) {
+        var resultObject = '{"resultText": "' + result + '", "imageURL": "' + deck.cards[drawnCard].image + '"}';
+        res.send(JSON.parse(resultObject));
+    })
+});
+
 function getNewDeck(callback) {
-    request('https://deckofcardsapi.com/api/deck/new/draw/?count=52', { json: true }, (err, res, body) => {
-        if (err) { return console.log(err); }
-        callback(body);
-    });
+    if (deckID == "") {
+        request('https://deckofcardsapi.com/api/deck/new/draw/?count=52', { json: true }, (err, res, body) => {
+            if (err) { return console.log(err); }
+            callback(body);
+        });
+    } else {
+        request('https://deckofcardsapi.com/api/' + deckID + '/shuffle', { json: true }, (err, res, body) => {
+            if (err) { return console.log(err); }
+            callback(body);
+        });
+    }
 }
 
-function drawCard(callback) {
+function drawCard() {
     drawnCard++;
-
 }
 
-function compareCards() {
+function compareCards(callback) {
     var result = "";
-    if (deck.cards[drawnCard].value > deck.cards[drawnCard - 1].value) {
+    var newCard = drawnCard + 1;
+    var oldValue = parseInt(deck.cards[drawnCard].value);
+    var newValue = parseInt(deck.cards[newCard].value);
+    console.log(oldValue);
+    console.log(newValue);
+    if (newValue > oldValue) {
         result = "Higher";
-    } else if (deck.cards[drawnCard].value < deck.cards[drawnCard - 1].value) {
+        console.log("Higher: " + newValue + " > " + oldValue);
+    } else if (newValue < oldValue) {
+        console.log("Lower: " + newValue + " < " + oldValue);
         result = "Lower";
     } else {
         result = "Even";
     }
+    drawnCard++;
+    callback(result);
 }
 
 function setCardValues() {
