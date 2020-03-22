@@ -29,6 +29,7 @@ app.get('/newGame', function(req, res) {
         var cardURL = deck.cards[0].image;
         res.send(cardURL);
         setCardValues();
+        drawnCard = 0;
     });
 });
 
