@@ -24,6 +24,7 @@ app.get('/', function(req, res, next) {
 app.get('/newGame', function(req, res) {
     getNewDeck(function(deckObject) {
         deck = deckObject;
+        deckID = deckObject.deck_id;
         console.log(deck.deck_id);
         console.log(deck.cards[0].code);
         var cardURL = deck.cards[0].image;
@@ -49,9 +50,13 @@ function getNewDeck(callback) {
             callback(body);
         });
     } else {
-        request('https://deckofcardsapi.com/api/' + deckID + '/shuffle', { json: true }, (err, res, body) => {
+        request('https://deckofcardsapi.com/api/deck/' + deckID + '/shuffle/', { json: true }, (err, res, body) => {
             if (err) { return console.log(err); }
-            callback(body);
+            //callback(body);
+            request('https://deckofcardsapi.com/api/deck/' + deckID + '/draw/?count=52', { json: true }, (err, res, body) => {
+                if (err) { return console.log(err); }
+                callback(body);
+            });
         });
     }
 }
