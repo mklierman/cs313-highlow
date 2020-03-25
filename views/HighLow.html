@@ -11,6 +11,11 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script>
         var score = 0;
+        var highScores;
+
+        $(document).ready(function() {
+            getScores();
+        });
 
         function newGame() {
             var xhttp = new XMLHttpRequest();
@@ -33,8 +38,6 @@
             };
             xhttp.open("GET", "/newGame", true);
             xhttp.send();
-
-
         }
 
         function drawCard(guess) {
@@ -57,15 +60,60 @@
                         $("#lowerButton").hide();
                         $("#higherButton").hide();
                         document.getElementById("gameMessage").textContent = "Game Over! You guessed " + guess.charAt(0).toUpperCase() + guess.slice(1);
+                        checkScore();
                     } else {
                         score++;
-
                         document.getElementById("playerScore").textContent = "Score: " + score;
                     }
                 }
             };
             xhttp2.open("GET", "/drawCard", true);
             xhttp2.send();
+        }
+
+        function getScores() {
+            var xhttp3 = new XMLHttpRequest();
+            xhttp3.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    highScores = JSON.parse(this.response);
+                    tbodyHtml = '';
+                    for (i = 0; i < highScores.length; i++) {
+                        tbodyHtml += "<tr><td>" + (i + 1) + "</td>";
+                        tbodyHtml += "<td>" + highScores[i].Initials + "</td>";
+                        tbodyHtml += "<td>" + highScores[i].Score + "</td></tr>";
+                    }
+                    document.querySelector('#scoresBody').innerHTML = tbodyHtml;
+                }
+            };
+            xhttp3.open("GET", "/getScores", true);
+            xhttp3.send();
+        }
+
+        function checkScore() {
+            var len = highScores.length;
+            console.log(len);
+            var lowestScore = highScores[len - 1].Score;
+            if (score > lowestScore || len < 10) {
+                var initials = prompt("You've acheived a high score! Please enter your initials", "ABC");
+                initials = initials.substring(0, 3);
+                if (initials != null && initials != "") {
+                    var newScore = {
+                        Initials: initials,
+                        Score: score
+                    };
+                    addHighScore(newScore);
+                }
+            }
+        }
+
+        function addHighScore(score) {
+            $.post("/addScore", score, function(result) {
+                console.log(result);
+                if (result && result.success == true) {
+                    console.log("Added high score");
+                    getScores();
+                }
+            });
         }
     </script>
 </head>
@@ -137,7 +185,7 @@
             </div>
             <div class="col-md-2 center">
                 <h3>High Scores</h3>
-                <table class="table-sm highScores">
+                <table id="scoreTable" class="table-sm highScores">
                     <thead>
                         <tr>
                             <th>
@@ -151,62 +199,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                ABC
-                            </td>
-                            <td>
-                                26
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                XYZ
-                            </td>
-                            <td>
-                                22
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                3
-                            </td>
-                            <td>
-                                MDL
-                            </td>
-                            <td>
-                                16
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                4
-                            </td>
-                            <td>
-                                AML
-                            </td>
-                            <td>
-                                12
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                5
-                            </td>
-                            <td>
-                                ZZZ
-                            </td>
-                            <td>
-                                10
-                            </td>
-                        </tr>
+                    <tbody id="scoresBody">
                     </tbody>
                 </table>
             </div>

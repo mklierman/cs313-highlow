@@ -3,15 +3,21 @@ const path = require('path');
 var router = express.Router();
 const PORT = process.env.PORT || 5000;
 const request = require('request');
+const fs = require('fs');
 
 var deckID = "";
 var drawnCard = 0;
 var deck = null
+var highScores = null;
 
 var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+app.use(express.urlencoded({
+    extended: true
+}));
+
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -42,6 +48,46 @@ app.get('/drawCard', function(req, res) {
     })
 
 });
+
+app.get('/getScores', function(req, res) {
+    let rawdata = fs.readFileSync('public/scores.json');
+    highScores = JSON.parse(rawdata);
+    console.log(highScores[0]);
+    highScores.sort(function(a, b) { return b.highScores - a.highScores });
+    console.log(highScores[0]);
+
+    res.send(highScores);
+});
+
+app.post('/addScore', (req, res) => {
+    console.log("Got to add score");
+    var score = req.body.Score;
+    var initials = req.body.Initials;
+    console.log(score);
+    console.log(initials);
+    var len = highScores.length;
+    var lowestScore = highScores[len - 1].Score;
+    if (score > lowestScore || len < 10) {
+        //var initials = prompt("You've acheived a high score! Please enter your initials", "ABC");
+        if (initials != null && initials != "") {
+            var newScore = {
+                Initials: initials,
+                Score: score
+            };
+            highScores.push(newScore);
+            highScores.sort(function(a, b) {
+                return b.Score - a.Score
+            });
+            if (len >= 10) {
+                highScores.pop();
+            }
+        }
+    }
+    fs.writeFileSync('public/scores.json', JSON.stringify(highScores));
+    var result = { success: true };
+    res.status(200).json(result);
+});
+
 
 function getNewDeck(callback) {
     if (deckID == "") {
