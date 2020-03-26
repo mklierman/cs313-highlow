@@ -94,7 +94,7 @@
             console.log(len);
             var lowestScore = highScores[len - 1].Score;
             if (score > lowestScore || len < 10) {
-                var initials = prompt("You've acheived a high score! Please enter your initials", "ABC");
+                var initials = prompt("You've acheived a high score! Please enter your initials", "");
                 initials = initials.substring(0, 3);
                 if (initials != null && initials != "") {
                     var newScore = {
